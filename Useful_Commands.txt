@@ -1,8 +1,8 @@
 
-.bash_profile 
+.bash_profile
 --------------------------------------------------------------------------------------------
 alias l='ls -alF'
-  
+
 # opens a current directory
 alias f='open -a Finder ./'
 alias prc='echo "sudo lsof -i tcp:<PROCESS NUMBER>" '
@@ -40,6 +40,10 @@ git rebase master
 git stash pop
 // fix the merge conflict then
 git rebase --continue (repeat git rebase --continue until fixed)
+
+
+Create a new branch and move to a new branch
+$ git checkout -b [name_of_your_new_branch]
 
 --------------------------------------------------------------------------------------------
 https://spdc-pipeline.azurewebsites.net/
