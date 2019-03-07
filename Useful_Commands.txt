@@ -7,7 +7,12 @@ alias l='ls -alF'
 alias f='open -a Finder ./'
 alias prc='echo "sudo lsof -i tcp:<PROCESS NUMBER>" '
 alias prc1='echo "netstat -ano | findstr :3000" '
-
+killport ()
+{
+        lsof -i tcp:"$@" | awk 'NR!=1 {print $2}' | xargs kill -9
+}
+# how to use : $> killport <port>
+killport()
 
 export PS1="___________________    | \w @ \h (\u) \n| => "
 export PS2="| => "
