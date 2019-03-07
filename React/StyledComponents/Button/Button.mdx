@@ -1,0 +1,52 @@
+---
+name: Button
+---
+import globalStyle from '../../styles/themes/globalStyle.js';
+import { ThemeProvider } from 'styled-components';
+import { Playground, PropsTable } from 'docz'
+import { Button } from '../';
+import TooltipQuestionIcon from '../../images/TooltipQuestionIcon';
+import {theme} from '../../styles/themes';
+
+# Button
+
+<PropsTable of={Button} />
+
+## Basic usage
+
+<Playground>
+  <ThemeProvider theme={theme}>
+    <>
+      <Button>Click me</Button>
+      <br/>
+      <br/>
+      <Button disabled>Click me</Button>
+    </>
+  </ThemeProvider>
+</Playground>
+
+## Icon Button
+
+<Playground>
+  <ThemeProvider theme={theme}>
+    <Button iconButton>
+      <TooltipQuestionIcon/>
+    </Button>
+  </ThemeProvider>
+</Playground>
+
+## Block Button
+
+<Playground >
+  <ThemeProvider theme={theme}>
+    <Button block>Click me</Button>
+  </ThemeProvider>
+</Playground>
+
+## Arrow Button
+
+<Playground >
+  <ThemeProvider theme={theme}>
+    <Button arrow>Click me</Button>
+  </ThemeProvider>
+</Playground>
