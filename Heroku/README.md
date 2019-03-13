@@ -9,6 +9,9 @@ $ git add .
 $ git commit -m "Text"
 $ git push heroku master
 
+# Add a Heroku app as a Git remote
+$ heroku git:remote -a <app name>
+
 # Visit the app
 $ heroku open
 
@@ -19,7 +22,7 @@ $ heroku ps:scale web=1
 $ heroku logs --tail
 
 # Define a Procfile
-$web: node index.js
+$ web: node index.js
 
 # Check how many dynos running
 $ heroku ps
