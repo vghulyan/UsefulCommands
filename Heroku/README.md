@@ -4,6 +4,11 @@ $ heroku login
 # Create a Heroku app
 $ heroku create
 
+# Disable Cache
+$ heroku config:set NODE_MODULES_CACHE=false
+$ git commit -am 'disable node_modulles cache' --allow-empty
+$ git push heroku master
+
 # Deploy your code
 $ git add .
 $ git commit -m "Text"
