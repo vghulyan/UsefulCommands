@@ -1,6 +1,11 @@
 Front End
 ------------------------------------------------
-If authorised then go to MAIN page
+If authorised then
+    send a ping(user_id) to backend
+    capture user's browser in the server, if valid token and browser is mobile
+    then
+        go to MAIN page
+    else Login screen
 
 Login Screen: email/password if success then go to MAIN page
 
@@ -38,7 +43,9 @@ MAIN page: Display Card : flex: 1
 			Languages Spoken (flags)
 			Distance
 
-MAIN page: Top Menu (Profile)
+NavBar - Report a profile (PROFILE)
+
+NavBar (Profile)
 	Profile:
 		Users main photo
 		New Profiles (Non seen before : !PROFILES.not_seen table)
@@ -68,6 +75,86 @@ Detect Browser,
 Mongo query: Relationship
 
 
+
+API
+-----------------------------------
+POST - REGISTER A NEW USER: /api/user/register, {user}
+POST - LOGOUT: /api/user/login, {user_id} // invalidate token
+POST - LOGIN: /api/user/login, {email, password}
+POST - UPLOAD_IMAGES: /api/user/upload_images, [...images]
+POST - SEND_REQUEST: /api/user/send_request, {to_user_id}
+POST - DELETE_AN_ACCOUNT: /api/user/delete_account, {user_id} set flag=false
+POST - HIDE_A_PROFILE: /api/user/hide_profile, {the_user_id_to_hide}
+POST - UN_HIDE_A_PROFILE: /api/user/un_hide_a_profile, {the_user_id_to_un_hide}
+POST - GET_MESSAGES_BY_A_USER: /api/user/message_by_a_user_id, {by_user_id}
+POST - SEARCH_PEOPLE_BY_AGE /api/user/search_by_age {age-range}
+POST - SEND_MESSAGE_TO_A_USER /api/user/send_message_to_a_user, {to_user_id, message}
+POST - [DISABLE_ENABLE]_AN_ACCOUNT /api/user/disable_the_accoun, {user_id} // on disable set message in notes
+POST -
+
+
+GET - GET_USERS_BY_ (filter by date)
+        HIDDEN_PROFILES // who is hidden by whom
+        LOCKED_ACCOUNT // How many accounts are locked
+        DELETED_ACCOUNTS // How many accounts are deleted (flags=false)
+        DISABLED_ACCOUNT // How many accounts are disabled
+        NEW_PROFILES // HOW MANY NEW PROFILES
+        NEAR_BY_PROFILES // HOW MANY PROFILES NEAR BY
+        SEARCH_BY_MAP // SEARCH USERS BY MAP
+        ALL_USERS // HOW MANY TOTAL USERS
+        HOW_MANY_MESSAGES_BEEN_POSTED_[TODAY, PER LAST WEEK, PER LAST MONTH, PER YEAR, PER DATE]
+        HOW_MANY_IPHONE_USERS
+        HOW_MANY_ANDROID_USERS
+        GET_AVERAGE_TIME_USER_SPEND
+        GET_AVERAGE_TIME_BY_USER {user_id} -> hh:mm:ss
+
+
+
+GET_USERS_BY_ID_
+    ID
+    EMAIL
+    ALERGIES
+    DoB
+    AGE (YEAR)
+    CITY
+    DATE
+    REQUESTS_TO
+    REQUEST_FROM
+    MESSAGE_TO
+    MESSAGES_FROM
+    MESSAGE_READ_CONFIRMS
+    COUNTRY
+    SPOKEN_LANGUAGES
+    HIDDEN_PROFILES
+    LATITUDE
+    LONGITUDE
+    ALL_PICTURES
+    SEEN_PROFILES
+    REPORTED_PROFILES_FROM
+    REPORTED_PROFILES_TO
+    MESSAGE_FROM_ID
+    MESSAGE_FROM_DATE
+    MESSAGE_TO_ID
+    MESSAGE_TO_DATE
+    REQUEST_FROM_ID
+    REQUEST_FROM_APPROVED
+    REQUEST_FROM_DATE
+    REQUEST_TO_ID
+    REQEUST_TO_APPROVED
+    REQUEST_TO_DATE
+    HIDDEN_ID
+    HIDDEN_DATE
+    SEEN_PROFILES
+    REPORTED_PROFILES
+
+
+
+GET_CONTROL_TABLE_DATA
+
+PUT - UPDATE THE USER: /api/user/update, {user}
+
+
+
 DB
 ------------------------------------
 USERS table:
@@ -90,21 +177,19 @@ USERS table:
 	last failed attempt,
 	last_active: Date,
 	MESSAGE: (from other users)
+	last_accessed_datetime
+	disabled = false
+    notes: text
 	flag = false,
 
 LANGUAGES
 	Language
 	flags
 
-REASON (for rejecting the account)
-	Array: 	[
-				{code: "Reason 1"},
-				{code: "Reason 2"}
-			]
-
 PROFILES:
 	user_id,
 	seen_profiles: [id1, id2, id3]
+	reported_profiles: [id1, id2, id3]
 
 MESSAGE
 	user_id
@@ -134,5 +219,20 @@ HIDDEN PROFILES
 		id:
 		date:
 
+STATISTICS
+    user_id
+    time_started_to_use (app opened)
+    time_end_to_use (app closed)
+
+
+
 CONTROLS
     Message_text_length
+    Max_images_to_upload=3
+    REASON (for rejecting the account)
+	    Array: 	[
+				{code: "Reason 1"},
+				{code: "Reason 2"}
+			]
+    Total_iphone_users
+    Total_android_users
