@@ -1,3 +1,5 @@
+Document the how and what???
+
 Front End
 ------------------------------------------------
 If authorised then
@@ -30,7 +32,7 @@ Profile Page:
 	City: Input field(Choose City/Country)
 	Spoken Languages: (New Screen with list of languages options)
 	Submit: On submit : 1. save the values in AsyncStorage and submit to backend
-						2. Send email to admin
+						2. Send email to CONTROLS.email_address
 
 		Response:
 			Fail: -> Reason (TABLE)
@@ -59,7 +61,7 @@ NavBar (Profile)
 SETTINGS page:
 	Age range : (slider: 18-60+)
 	HIDDEN PROFILES
-	Support: chat text message to the admin
+	Support: chat text message to the GroupCreator
 	Change Language
 	Change Password
 	Notifications: (AsyncStorage: Checkboxes: by default checked)
@@ -71,8 +73,8 @@ SETTINGS page:
 
 
 SERVER
-Detect Browser,
-Mongo query: Relationship
+    Detect Browser,
+    Mongo query: Relationship
 
 
 
@@ -89,35 +91,37 @@ POST - UN_HIDE_A_PROFILE: /api/user/un_hide_a_profile, {the_user_id_to_un_hide}
 POST - GET_MESSAGES_BY_A_USER: /api/user/message_by_a_user_id, {by_user_id}
 POST - SEARCH_PEOPLE_BY_AGE /api/user/search_by_age {age-range}
 POST - SEND_MESSAGE_TO_A_USER /api/user/send_message_to_a_user, {to_user_id, message}
-POST - [DISABLE_ENABLE]_AN_ACCOUNT /api/user/disable_the_accoun, {user_id} // on disable set message in notes
-POST -
+POST - [DISABLE_ENABLE]_AN_ACCOUNT /api/user/disable_the_accoun, {user_id} // on disable set message in notes - only GroupCreator can do
 
 
 GET - GET_USERS_BY_ (filter by date)
         HIDDEN_PROFILES // who is hidden by whom
-        LOCKED_ACCOUNT // How many accounts are locked
-        DELETED_ACCOUNTS // How many accounts are deleted (flags=false)
-        DISABLED_ACCOUNT // How many accounts are disabled
+        LOCKED_ACCOUNT // How many accounts are locked - GroupCreator
+        DELETED_ACCOUNTS // How many accounts are deleted (flags=false) - GroupCreator
+        DISABLED_ACCOUNT // How many accounts are disabled - GroupCreator
         NEW_PROFILES // HOW MANY NEW PROFILES
         NEAR_BY_PROFILES // HOW MANY PROFILES NEAR BY
         SEARCH_BY_MAP // SEARCH USERS BY MAP
         ALL_USERS // HOW MANY TOTAL USERS
-        HOW_MANY_MESSAGES_BEEN_POSTED_[TODAY, PER LAST WEEK, PER LAST MONTH, PER YEAR, PER DATE]
-        HOW_MANY_IPHONE_USERS
-        HOW_MANY_ANDROID_USERS
-        GET_AVERAGE_TIME_USER_SPEND
-        GET_AVERAGE_TIME_BY_USER {user_id} -> hh:mm:ss
+        HOW_MANY_MESSAGES_BEEN_POSTED_[TODAY, PER LAST WEEK, PER LAST MONTH, PER YEAR, PER DATE] - GroupCreator
+        HOW_MANY_IPHONE_USERS - GroupCreator
+        HOW_MANY_ANDROID_USERS - GroupCreator
+        GET_AVERAGE_TIME_USER_SPEND - GroupCreator
+        GET_AVERAGE_TIME_BY_USER {user_id} -> hh:mm:ss - GroupCreator
+        GET_EMAIL_SEND_TO_GROUP_CREATOR - GroupCreator
+        GET_LIST_OF_EMAILS_SEND_TO_GROUP_CREATOR - GroupCreator
+        GET_TOTAL_NUMBER_OF_GROUP_CREATORS - GroupCreator
 
 
 
 GET_USERS_BY_ID_
     ID
-    EMAIL
+    EMAIL - GroupCreator
     ALERGIES
-    DoB
-    AGE (YEAR)
+    DoB - GroupCreator
+    AGE (YEAR) - GroupCreator
     CITY
-    DATE
+    DATE_CREATED - GroupCreator
     REQUESTS_TO
     REQUEST_FROM
     MESSAGE_TO
@@ -126,30 +130,30 @@ GET_USERS_BY_ID_
     COUNTRY
     SPOKEN_LANGUAGES
     HIDDEN_PROFILES
-    LATITUDE
-    LONGITUDE
-    ALL_PICTURES
+    LATITUDE - GroupCreator
+    LONGITUDE - GroupCreator
+    ALL_PICTURES - GroupCreator
     SEEN_PROFILES
-    REPORTED_PROFILES_FROM
+    LIST_OF_REPORTED_PROFILES - GroupCreator
+    REPORTED_PROFILES_FROM - GroupCreator
     REPORTED_PROFILES_TO
     MESSAGE_FROM_ID
-    MESSAGE_FROM_DATE
+    MESSAGE_FROM_DATE - GroupCreator
     MESSAGE_TO_ID
-    MESSAGE_TO_DATE
+    MESSAGE_TO_PER_DATETIME - GroupCreator
     REQUEST_FROM_ID
-    REQUEST_FROM_APPROVED
-    REQUEST_FROM_DATE
+    REQUEST_FROM_APPROVED(they have approved the user) - GroupCreator
+    REQUEST_FROM_DATE(they have approved the user for a given date) - GroupCreator
     REQUEST_TO_ID
-    REQEUST_TO_APPROVED
-    REQUEST_TO_DATE
-    HIDDEN_ID
-    HIDDEN_DATE
+    REQEUST_TO_APPROVED(user has approved the requestor)
+    REQUEST_TO_DATE(user has approved based on date) - GroupCreator
+    LIST_OF_HIDDEN_IDS
+    LIST_OF_HIDDEN_DATE - GroupCreator
     SEEN_PROFILES
-    REPORTED_PROFILES
 
 
 
-GET_CONTROL_TABLE_DATA
+GET_CONTROL_TABLE_DATA - GroupCreator
 
 PUT - UPDATE THE USER: /api/user/update, {user}
 
@@ -178,9 +182,9 @@ USERS table:
 	last_active: Date,
 	MESSAGE: (from other users)
 	last_accessed_datetime
-	disabled = false
-    notes: text
-	flag = false,
+	disabled = false - GroupCreator
+    notes: text - GroupCreator
+	flag = false - GroupCreator
 
 LANGUAGES
 	Language
@@ -236,3 +240,14 @@ CONTROLS
 			]
     Total_iphone_users
     Total_android_users
+    email: {
+        email_address: abc@abc.com
+        password: password
+    }
+
+GROUP_CREATOR (On creating a GROUP_CREATOR send emails to every GroupCreator)
+    id
+    email
+    password
+    date_created
+    last_updated
