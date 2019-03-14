@@ -1,0 +1,127 @@
+Front End
+------------------------------------------------
+If authorised then go to MAIN page
+
+Login Screen: email/password if success then go to MAIN page
+
+Register Screen: Email/password
+	on submit: display additional security field
+		backend: Steps: Generate 6 digit security code and store in users table: tmpPassword
+		Send email to the user with 6 digit extra security code to enter in security field
+		On 10th failed attempt to enter security code:
+			lock the account
+			send an email to the user about the failed attempt and message: 1 hour your account is locked
+			unlock the account after 1 hour and let to enter the 6 digit code again, if failed another 5 attempts then lock for 24 hours
+			if total attempts is 20 then block the user
+		On Success:
+			set total_attempts=0
+			set last_active=new Date()
+			go to profile page and allow to enter additional info and upload users photo
+
+Profile Page:
+	Upload a photo
+	Allergic: True/False (Checkbox)
+	DoB: Date Picker
+	City: Input field(Choose City/Country)
+	Spoken Languages: (New Screen with list of languages options)
+	Submit: On submit : 1. save the values in AsyncStorage and submit to backend
+						2. Send email to admin
+
+		Response:
+			Fail: -> Reason (TABLE)
+			Success: -> Save user records to USER table and redirect to the MAIN page
+
+
+MAIN page: Display Card : flex: 1
+			User Photo
+			City
+			Languages Spoken (flags)
+			Distance
+
+MAIN page: Top Menu (Profile)
+	Profile:
+		Users main photo
+		New Profiles (Non seen before : !PROFILES.not_seen table)
+		All Profiles: PROFILES.all
+		People Nearby: From near to max distance
+		Search by Map: Map with dots(Numbers)
+		MESSAGES: New Message & old Messages
+		REQUESTS:
+		Settings
+
+SETTINGS page:
+	Age range : (slider: 18-60+)
+	HIDDEN PROFILES
+	Support: chat text message to the admin
+	Change Language
+	Change Password
+	Notifications: (AsyncStorage: Checkboxes: by default checked)
+				Show message text (allow user to see message text)
+				Messages (allow to see new Messages notification)
+				Incorming requests: (allow for new incoming recuests)
+				Approved requests: (to show approved requests)
+				Photos: (allow to see photos)
+
+USERS table:
+	user_id,
+	email,
+	password,
+	tmpPassword,
+	Allergic := Enum['Yes' : 'No']
+	DoB,
+	City,
+	Country,
+	Latitude,
+	Longitude,
+	Spoken LANGUAGES,
+	Main Photo (photo url),
+	Photoes,
+	date created,
+	last updated,
+	failed attempts (10),
+	last failed attempt,
+	last_active: Date,
+	MESSAGE: (from other users)
+	flag = false,
+
+LANGUAGES
+	Language
+	flags
+
+REASON (for rejecting the account)
+	Array: 	[
+				{code: "Reason 1"},
+				{code: "Reason 2"}
+			]
+
+PROFILES:
+	user_id,
+	seen_profiles: [id1, id2, id3]
+
+MESSAGE
+	user_id
+	Messages from:
+		id:
+		message:
+		date
+	Message to:
+		id
+		message
+		date
+
+REQUESTS
+	user_id
+	Reqeust from:
+		id
+		Approved (yes, no)
+		date
+	Request to:
+		id
+		Apprvoed(yes, no)
+		date
+
+HIDDEN PROFILES
+	user_id
+	Hidden Profiles
+		id:
+		date:
