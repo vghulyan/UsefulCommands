@@ -62,6 +62,14 @@ SETTINGS page:
 				Approved requests: (to show approved requests)
 				Photos: (allow to see photos)
 
+
+SERVER
+Detect Browser,
+Mongo query: Relationship
+
+
+DB
+------------------------------------
 USERS table:
 	user_id,
 	email,
@@ -125,3 +133,6 @@ HIDDEN PROFILES
 	Hidden Profiles
 		id:
 		date:
+
+CONTROLS
+    Message_text_length

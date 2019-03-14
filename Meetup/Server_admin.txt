@@ -1,0 +1,16 @@
+WAF - Web Applicatioin Firewall
+1. Countries allowed/disallowed
+2. Browser detection
+3. SQL injection
+4. Cross-site scripting XSS
+5. File inclusion
+6. Hidden field manipulation
+7. Cookie poisoning
+8. Parameter tampering[5]
+9. Buffer overflow
+10. Cross site scripting (XSS)
+11. Backdoor or debug options
+12. Stealth commanding
+13. Forced browsing
+
+Vulnerability scanner
