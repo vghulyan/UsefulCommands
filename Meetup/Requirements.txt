@@ -157,7 +157,7 @@ GET_CONTROL_TABLE_DATA - GroupCreator
 
 PUT - UPDATE THE USER: /api/user/update, {user}
 
-
+Write an AuthGuard who can check who is making the query
 
 DB
 ------------------------------------

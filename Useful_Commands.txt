@@ -50,6 +50,12 @@ git rebase --continue (repeat git rebase --continue until fixed)
 Create a new branch and move to a new branch
 $ git checkout -b [name_of_your_new_branch]
 
+Delete old repository and create new:
+    fatal: remote origin already exists.
+    $ git remote rm origin
+    $ git remote add origin https://github.com/xyz/xyz.git
+    git push -u origin master
+
 --------------------------------------------------------------------------------------------
 https://spdc-pipeline.azurewebsites.net/
 https://spdc-pipeline-qa.azurewebsites.net/
