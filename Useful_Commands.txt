@@ -65,7 +65,10 @@ git init
 git add .
 git commit -m "Initial commit"
 -- push to the github remote repos ensuring you overwrite history
-git remote add origin git@github.com:<YOUR ACCOUNT>/<YOUR REPOS>.git
+
+    *********** ERROR: Repository not found. ***********
+    fatal: Could not read from remote repository.
+git remote set-url origin https://github.com/robakunc/jwtpatient.git
 git push -u --force origin master
 
 
