@@ -45,6 +45,7 @@ git rebase master
 git stash pop
 // fix the merge conflict then
 git rebase --continue (repeat git rebase --continue until fixed)
+git add .
 
 
 Create a new branch and move to a new branch
