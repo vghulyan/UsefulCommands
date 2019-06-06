@@ -2,7 +2,7 @@
 
 The year is 2092. A budding young vocalist and his band have just enough money to buy a hovercar and begin their tour. They have struck deals with multiple venues and can set their own tour schedule, any venue in any order. Can you help them find the shortest route to take to hit all cities to maximize their fuel budget?
 
-We have provided some test data to begin mapping on the grid. Spend up to 4 hours creating your algorithm and display of optimal route(s). Fork this repository and make any notes and commentary at the bottom of the readme.
+We have provided some test data to begin mapping on the grid. Spend up to 4 hours creating your algorithm and display of optimal route(s). Make any notes and commentary at the bottom of the readme.
 
 # The Tech
 
