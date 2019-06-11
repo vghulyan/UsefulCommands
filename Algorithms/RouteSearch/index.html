@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Route-Search</title>
+    <meta charset="utf-8"/>
+    <!-- load resources -->
+    <script type="text/javascript" src="RouteSearchView.js"></script>
+    <script type="text/javascript" src="RouteSearch.js"></script>
+    <link rel="stylesheet" href="style.css"/>
+
+    <!-- initializing code -->
+    <script type="text/javascript">
+        window.onload = function () {
+            RouteSearchView.init();
+        }
+    </script>
+</head>
+<body>
+<div id="container">
+    <form id="waypointForm">
+        <input id="waypointInput" type="text" placeholder="Enter the waypoints in the format [{x: #, y: #}, ...] here"/>
+        <input id="calcRouteButton" type="submit" value="Calculate Route">
+    </form>
+    <h1>Output</h1>
+    <table id="outputTable">
+        <thead>
+        <tr>
+            <th>Waypoint #</th>
+            <th>X</th>
+            <th>Y</th>
+            <th>Distance</th>
+            <th>Total Distance</th>
+        </tr>
+        </thead>
+        <tbody id="outputTableBody">
+        <tr>
+            <td id="noResultMessage" colspan="5">No waypoints calculated yet</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
