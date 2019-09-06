@@ -35,6 +35,10 @@ Reset npm cache: npm start -- --reset-cache
 
 GIT:
 
+Jump from one account to another:
+$> git remote set-url origin https://username@github.com/username/repo-name.git
+$> git push -u origin master
+
 git checkout -b <my branch>
 git stash
 git checkout master

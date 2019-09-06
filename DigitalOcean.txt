@@ -1,0 +1,124 @@
+STEPS - DIGITAL OCEAN
+1. Setupa a Digital Ocean Droplet
+2. Setup & use SSh keys
+3. Disable password login
+4. Create a new user and authorize
+5. Install Node.js on the server
+6. Install Git on the server
+7. Clone a Git repo (Node application)
+8. Install PM2 to run app as a service
+9. Link a domain name with our app
+10. User port 80 with  libcap2-bin
+
+
+
+Digital Ocean
+Create a droplet
+add ssh_key:
+ssh root@<ip address>
+create a new user: adduser myuser
+Add the user to the sudo goup: usermod -aG sudo myser
+Check to make sure they were added: id myuser
+Login as that user: sudo su - myuser
+
+Authorise Key For New User vardan
+Create a .ssh directory:
+    mkdir ~/.ssh
+    chmod 700 ~/.ssh
+    Enter the authorized_keys file: vi ~/.ssh/authorized_keys
+    Paste in your key in this format with NO LINEBREAKS
+        ssh-rsa AABZNAC..... ==
+    exit and save
+    Now change the prmissions of the file: chmod 600 ~/.ssh/authorized_keys
+    Restart the ssh service: sudo service ssh restart
+    Close the terminal and login using the new user <vardan> - ssh vg@127.0.0...
+
+Disable Root & Password Login
+    After logged in as the new user<vardan>, edit the sshd_config file: sudo vi /etc/ssh/sshd_config
+    Change to the following
+        PermitRootLogin no
+        PasswordAuthentication no
+        Reload sshd with this command: sudo systemctl reload sshd
+        You can test out the password and root login  now if you want to make sure it doesn not let you in
+
+Install Node.JS on the Server
+    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+    Now node should be isntalled. To chek use: node -v
+
+Install Git on the Server: sudo apt-get install git
+
+Create SSH Key for Github
+Now you need to create your SSH key for Github: ssh-keygen -t rsa -C "v******n@yahoo.com"
+It will get saved to home/myuser/.ssh/id_rsa.pub
+Copy that key in that file.
+Once you copy the key, sign into Github and goto "Settings->SSH and GPG Keys" and add and name the new key
+
+Clone The Node.js App From Github And Test
+    https://github.com/heroku/node-js-sample
+    git clone git@github.com:heroku/node-js-sample.git
+    cd node-js-sample
+    npm install
+    npm start
+    Now go to your browser and put http://YOURSERVERIP:5000 and you should see your apps Hello WOrld page
+    Stop the app with ctrl + c
+
+Install PM2
+    Install PM2 so you can run the app as a process
+    sudo npm install pm2 -g
+    pm2 start index.js
+    Your app should now be running as a process
+        Start and Daemonize any application:
+        $ pm2 start app.js
+
+        Load Balance 4 instances of api.js:
+        $ pm2 start api.js -i 4
+
+        Monitor in production:
+        $ pm2 monitor
+
+        Make pm2 auto-boot at server restart:
+        $ pm2 startup
+
+        To go further checkout:
+        http://pm2.io/
+
+        pm2 monit // you can find the id/index
+        pm2 stop index.js
+        pm2 restart
+        pm2 delete
+
+
+Add A Domain Name
+    Go to your domain registrar and add the following nameservers for the domaon
+    ns1.digitalocean.com
+    ns2.digitalocean.com
+    ns3.digitalocean.com
+    It may take a few hours for the DNS to kick in
+    Now go to your Didital Ocean panel and go to "Networking->Domains" and add the domain there
+
+Create An A Record
+    Networking: add a domain name: hayser.co.uk
+    A
+        Hostname : @
+        Will Direct To: <your droplet>
+        Create Record
+    CNAME
+        Hostname: www
+        Is an alias of: @
+        Create Record
+
+
+
+Get rid of the :5000 port to run on :80
+    Stop the app with: pm2 stop index.js
+    Open up your apps index.js file and change port 5000 to port 80
+    Install the libcap2-bin package: sudo apt-get install libcap2-bin ( sudo apt autoremove // to remove it)
+    Run this command: sudo setcap cap_net_bind_service=+ep `readlink -f \`which node\``
+    Start your app up again: pm2 start index.js
+    Visit http://myapp.com
+
+FAQ:
+    When: ssh: connect to host 165.22.125.187 port 22: Connection refused
+        sudo apt-get remove openssh-client openssh-server
+        sudo apt-get install openssh-client openssh-server
