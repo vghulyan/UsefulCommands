@@ -1,4 +1,3 @@
-
 // characters based
 detectAnagram(one: any, two:any) {
   const sortedWord = one
