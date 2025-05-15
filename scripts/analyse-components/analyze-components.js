@@ -26,19 +26,24 @@ rl.question(
         const declaredComponents = new Set();
 
         function walk(dir, callback) {
-          const files = fs.readdirSync(dir);
-          for (const file of files) {
-            const full = path.join(dir, file);
+          const entries = fs.readdirSync(dir);
+          for (const name of entries) {
+            // skip node_modules entirely
+            if (name === "node_modules") continue;
+
+            const full = path.join(dir, name);
             const stat = fs.statSync(full);
+
             if (stat.isDirectory()) {
               walk(full, callback);
-            } else if (/(\.js|\.jsx|\.ts|\.tsx)$/.test(path.extname(file))) {
+            } else if (/\.(js|jsx|ts|tsx)$/.test(name)) {
               callback(full);
             }
           }
         }
 
         function parseFile(filePath) {
+          if (filePath.includes("node_modules")) return;
           const relPath = path.relative(projectRoot, filePath);
           const content = fs.readFileSync(filePath, "utf-8");
 
