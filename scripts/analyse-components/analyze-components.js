@@ -18,7 +18,7 @@ rl.question(
         const outputHtml = outputFile.trim() || "component-usage-report.html";
         const componentFolder = path.join(projectRoot, "src", "components");
 
-        const componentRegex = /<([a-zA-Z0-9_:.-]+)\b/g;
+        const componentRegex = /<([A-Z][\w.-]*)\b/g;
         const propsRegex = /<([a-zA-Z0-9_:.-]+)\s+([^>/]+?)(?:\/?>)/gs;
 
         const usageMap = {};
@@ -28,7 +28,7 @@ rl.question(
         function walk(dir, callback) {
           const entries = fs.readdirSync(dir);
           for (const name of entries) {
-            // skip node_modules entirely
+            // 1) skip node_modules
             if (name === "node_modules") continue;
 
             const full = path.join(dir, name);
@@ -36,7 +36,11 @@ rl.question(
 
             if (stat.isDirectory()) {
               walk(full, callback);
-            } else if (/\.(js|jsx|ts|tsx)$/.test(name)) {
+            } else if (
+              /\.(js|jsx|ts|tsx)$/.test(name) && // only JS/TS
+              !name.endsWith(".min.js") && // skip minified
+              !full.includes(path.sep + "examples" + path.sep) // example: skip examples
+            ) {
               callback(full);
             }
           }
@@ -76,6 +80,11 @@ rl.question(
           });
         }
 
+        /*
+          If you only want to walk through src/components folder then uncomment this
+        */
+        // const componentsDir = path.join(projectRoot, "src", "components");
+        // walk(componentsDir, parseFile);
         walk(projectRoot, parseFile);
 
         function generateReport() {
