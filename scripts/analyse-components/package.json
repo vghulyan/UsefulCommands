@@ -1,9 +1,9 @@
 {
   "name": "analyse-components",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "analyze-components.js",
   "scripts": {
-    "analyse:components": "node index.js"
+    "analyse:components": "node analyze-components.js"
   },
   "keywords": [],
   "author": "",
