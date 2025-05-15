@@ -96,29 +96,33 @@ rl.question(
           Array.from(allFiles)
             .sort()
             .forEach((f) => {
-              html += `<option value="\${f}">\${f}</option>`;
+              html += `<option value="${f}">${f}</option>`;
             });
 
           html += `</select></label> <button onclick="exportCSV()">⬇ Export CSV</button>`;
           html += `<table id="usageTable">
 <thead><tr><th onclick="sortTable(0)">Component</th><th onclick="sortTable(1)">File</th><th onclick="sortTable(2)">Count</th><th onclick="sortTable(3)">Total</th></tr></thead><tbody>`;
 
-          Object.entries(usageMap).forEach(([component, files]) => {
+          for (const [component, files] of Object.entries(usageMap)) {
             const total = Object.values(files).reduce((a, b) => a + b, 0);
-            Object.entries(files).forEach(([file, count]) => {
-              html += `<tr data-comp="\${component}" data-file="\${file}" class="\${total > 5 ? 'highlight' : ''}">
-<td>\${component}</td><td>\${file}</td><td>\${count}</td><td>\${total}</td>
+            for (const [file, count] of Object.entries(files)) {
+              html += `<tr data-comp="${component}" data-file="${file}" class="${
+                total > 5 ? "highlight" : ""
+              }">
+<td>${component}</td><td>${file}</td><td>${count}</td><td>${total}</td>
 </tr>`;
-            });
-          });
+            }
+          }
 
           html += `</tbody></table><h2>Props Used</h2><table><thead><tr><th>Component</th><th>File</th><th>Props</th></tr></thead><tbody>`;
 
-          Object.entries(propsMap).forEach(([component, files]) => {
-            Object.entries(files).forEach(([file, propsSet]) => {
-              html += `<tr><td>\${component}</td><td>\${file}</td><td>\${Array.from(propsSet).join(", ")}</td></tr>`;
-            });
-          });
+          for (const [component, files] of Object.entries(propsMap)) {
+            for (const [file, propsSet] of Object.entries(files)) {
+              html += `<tr><td>${component}</td><td>${file}</td><td>${Array.from(
+                propsSet
+              ).join(", ")}</td></tr>`;
+            }
+          }
 
           html += `</tbody></table>`;
 
@@ -129,7 +133,7 @@ rl.question(
           if (unusedComponents.length > 0) {
             html += `<h2>⚠ Unused Components in /components</h2><ul>`;
             unusedComponents.forEach((comp) => {
-              html += `<li>\${comp}</li>`;
+              html += `<li>${comp}</li>`;
             });
             html += `</ul>`;
           }
@@ -174,7 +178,6 @@ function exportCSV() {
   a.download = "component-usage.csv";
   a.click();
 }
-
 
 search.addEventListener('input', filterRows);
 filter.addEventListener('change', filterRows);
