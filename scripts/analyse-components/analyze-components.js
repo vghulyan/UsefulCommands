@@ -159,11 +159,11 @@ rl.question(
         }
 
         function exportCSV() {
-          let csv = "Component,File,Count,Total\n";
+          let csv = "Component,File,Count,Total\"\n";
           rows.forEach(row => {
             if (row.style.display !== 'none') {
               const cols = row.querySelectorAll("td");
-              csv += Array.from(cols).map(td => td.innerText).join(",") + "\n";
+              csv += Array.from(cols).map(td => td.innerText).join(",") + "\"\n";
             }
           });
           const blob = new Blob([csv], { type: "text/csv" });
