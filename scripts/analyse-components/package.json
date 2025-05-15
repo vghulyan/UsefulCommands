@@ -1,0 +1,12 @@
+{
+  "name": "analyse-components",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "analyse:components": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
