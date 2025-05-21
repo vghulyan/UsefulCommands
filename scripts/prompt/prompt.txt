@@ -1,0 +1,27 @@
+notepad $PROFILE
+
+function prompt {
+  # current path in yellow
+  $cwd = Get-Location
+  Write-Host $cwd -NoNewline -ForegroundColor Yellow
+
+  # if inside a git repo, show branch in Green
+  if (Test-Path .git) {
+    try {
+      $branch = git rev-parse --abbrev-ref HEAD 2>$null
+      if ($branch) {
+        Write-Host " [$branch]" -NoNewline -ForegroundColor Green
+      }
+    } catch { }
+  }
+
+  # final prompt symbol
+  Write-Host " > " -NoNewline -ForegroundColor White
+  return " "  # keep PS happy
+}
+
+
+
+---------
+save and run:
+$> . $PROFILE

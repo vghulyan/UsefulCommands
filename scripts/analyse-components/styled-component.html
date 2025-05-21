@@ -1,102 +1,70 @@
 
-      <html><head><title>Component Usage Report</title>
-      <style>
-        body { font-family: sans-serif; padding: 20px; }
-        input, select, button { margin: 10px 5px; padding: 6px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-        th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
-        th { background: #eee; cursor: pointer; }
-        .highlight { background-color: #ffeeba; }
-      </style>
-      </head><body>
-      <h1>Component Usage Report</h1>
-      <label>🔍 Search Component: <input type="text" id="componentSearch" placeholder="e.g. Button" /></label>
-      <label>📂 Filter by File: <select id="fileFilter"><option value="">-- All Files --</option>`;
+<html><head><title>Component Usage Report</title>
+<style>
+  body { font-family: sans-serif; padding: 20px; }
+  input, select, button { margin: 10px 5px; padding: 6px; }
+  table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+  th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+  th { background: #eee; cursor: pointer; }
+  .highlight { background-color: #ffeeba; }
+</style>
+</head><body>
+<h1>Component Usage Report</h1>
+<label>🔍 Search Component: <input type="text" id="componentSearch" placeholder="e.g. Button" /></label>
+<label>📂 Filter by File: <select id="fileFilter"><option value="">-- All Files --</option><option value="Button/Button.js">Button/Button.js</option><option value="Button/Button.test.js">Button/Button.test.js</option><option value="Divider/Divider.test.js">Divider/Divider.test.js</option></select></label> <button onclick="exportCSV()">⬇ Export CSV</button><table id="usageTable">
+<thead><tr><th onclick="sortTable(0)">Component</th><th onclick="sortTable(1)">File</th><th onclick="sortTable(2)">Count</th><th onclick="sortTable(3)">Total</th></tr></thead><tbody><tr data-comp="StyledButton" data-file="Button/Button.js" class="">
+<td>StyledButton</td><td>Button/Button.js</td><td>1</td><td>1</td>
+</tr><tr data-comp="ArrowIcon" data-file="Button/Button.js" class="">
+<td>ArrowIcon</td><td>Button/Button.js</td><td>1</td><td>1</td>
+</tr><tr data-comp="Button" data-file="Button/Button.js" class="">
+<td>Button</td><td>Button/Button.js</td><td>1</td><td>3</td>
+</tr><tr data-comp="Button" data-file="Button/Button.test.js" class="">
+<td>Button</td><td>Button/Button.test.js</td><td>2</td><td>3</td>
+</tr><tr data-comp="SvgIcon" data-file="Button/Button.js" class="">
+<td>SvgIcon</td><td>Button/Button.js</td><td>1</td><td>1</td>
+</tr><tr data-comp="Divider" data-file="Divider/Divider.test.js" class="">
+<td>Divider</td><td>Divider/Divider.test.js</td><td>2</td><td>2</td>
+</tr></tbody></table><h2>Props Used</h2><table><thead><tr><th>Component</th><th>File</th><th>Props</th></tr></thead><tbody><tr><td>StyledButton</td><td>Button/Button.js</td><td>type, iconButton</td></tr><tr><td>Button</td><td>Button/Button.js</td><td></td></tr><tr><td>Button</td><td>Button/Button.test.js</td><td></td></tr><tr><td>Divider</td><td>Divider/Divider.test.js</td><td>theme</td></tr></tbody></table><script>
+const search = document.getElementById('componentSearch');
+const filter = document.getElementById('fileFilter');
+const rows = document.querySelectorAll('#usageTable tbody tr');
 
-      const allFiles = new Set();
-      Object.values(usageMap).forEach(files => Object.keys(files).forEach(f => allFiles.add(f)));
-      Array.from(allFiles).sort().forEach(f => {
-        html += `<option value="${f}">${f}</option>`;
-      });
+function filterRows() {
+  const searchVal = search.value.toLowerCase();
+  const fileVal = filter.value;
+  rows.forEach(row => {
+    const comp = row.dataset.comp.toLowerCase();
+    const file = row.dataset.file;
+    const show = (!searchVal || comp.includes(searchVal)) && (!fileVal || file === fileVal);
+    row.style.display = show ? '' : 'none';
+  });
+}
 
-      html += `</select></label> <button onclick="exportCSV()">⬇ Export CSV</button>`;
+function sortTable(col) {
+  const table = document.getElementById("usageTable");
+  const rows = Array.from(table.rows).slice(1);
+  rows.sort((a, b) => {
+    const x = a.cells[col].innerText;
+    const y = b.cells[col].innerText;
+    return !isNaN(x) && !isNaN(y) ? y - x : x.localeCompare(y);
+  }).forEach(r => table.tBodies[0].appendChild(r));
+}
 
-      html += `<table id="usageTable">
-        <thead><tr><th onclick="sortTable(0)">Component</th><th onclick="sortTable(1)">File</th><th onclick="sortTable(2)">Count</th><th onclick="sortTable(3)">Total</th></tr></thead><tbody>`;
+function exportCSV() {
+  let csv = "Component,File,Count,Total\n";
+  rows.forEach(row => {
+    if (row.style.display !== 'none') {
+      const cols = row.querySelectorAll("td");
+      csv += Array.from(cols).map(td => '\"' + td.innerText + '\"').join(",") + "\n";
+    }
+  });
+  const blob = new Blob([csv], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "component-usage.csv";
+  a.click();
+}
 
-      Object.entries(usageMap).forEach(([component, files]) => {
-        const total = Object.values(files).reduce((a, b) => a + b, 0);
-        Object.entries(files).forEach(([file, count]) => {
-          html += `<tr data-comp="${component}" data-file="${file}" class="${total > 5 ? 'highlight' : ''}">
-            <td>${component}</td><td>${file}</td><td>${count}</td><td>${total}</td>
-          </tr>`;
-        });
-      });
-
-      html += `</tbody></table><h2>Props Used</h2><table><thead><tr><th>Component</th><th>File</th><th>Props</th></tr></thead><tbody>`;
-
-      Object.entries(propsMap).forEach(([component, files]) => {
-        Object.entries(files).forEach(([file, propsSet]) => {
-          html += `<tr><td>${component}</td><td>${file}</td><td>${Array.from(propsSet).join(", ")}</td></tr>`;
-        });
-      });
-
-      html += `</tbody></table>`;
-
-      const usedComponents = new Set(Object.keys(usageMap));
-      const unusedComponents = Array.from(declaredComponents).filter(x => !usedComponents.has(x));
-      if (unusedComponents.length > 0) {
-        html += `<h2>⚠ Unused Components in /components</h2><ul>`;
-        unusedComponents.forEach(comp => {
-          html += `<li>${comp}</li>`;
-        });
-        html += `</ul>`;
-      }
-
-      html += `
-      <script>
-        const search = document.getElementById('componentSearch');
-        const filter = document.getElementById('fileFilter');
-        const rows = document.querySelectorAll('#usageTable tbody tr');
-
-        function filterRows() {
-          const searchVal = search.value.toLowerCase();
-          const fileVal = filter.value;
-          rows.forEach(row => {
-            const comp = row.dataset.comp.toLowerCase();
-            const file = row.dataset.file;
-            const show = (!searchVal || comp.includes(searchVal)) && (!fileVal || file === fileVal);
-            row.style.display = show ? '' : 'none';
-          });
-        }
-
-        function sortTable(col) {
-          const table = document.getElementById("usageTable");
-          const rows = Array.from(table.rows).slice(1);
-          let sorted = rows.sort((a, b) => {
-            const x = a.cells[col].innerText;
-            const y = b.cells[col].innerText;
-            return !isNaN(x) && !isNaN(y) ? y - x : x.localeCompare(y);
-          });
-          rows.forEach(r => table.tBodies[0].appendChild(r));
-        }
-
-        function exportCSV() {
-          let csv = "Component,File,Count,Total\n";
-          rows.forEach(row => {
-            if (row.style.display !== 'none') {
-              const cols = row.querySelectorAll("td");
-              csv += Array.from(cols).map(td => '"' + td.innerText + '"').join(",") + "\n";
-            }
-          });
-          const blob = new Blob([csv], { type: "text/csv" });
-          const a = document.createElement("a");
-          a.href = URL.createObjectURL(blob);
-          a.download = "component-usage.csv";
-          a.click();
-        }
-
-        search.addEventListener('input', filterRows);
-        filter.addEventListener('change', filterRows);
-      </script>
-      </body></html>
+search.addEventListener('input', filterRows);
+filter.addEventListener('change', filterRows);
+</script></body></html>
