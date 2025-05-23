@@ -1,0 +1,9 @@
+cd /usr/local/share/ca-certificates
+
+# Loop over every .crt/.pem file and print its filename + Subject:
+for cert in *.crt *.pem; do
+  [ -f "$cert" ] || continue
+  echo "––– $cert —––"
+  openssl x509 -in "$cert" -noout -subject | sed 's/subject= //'
+  echo
+done
