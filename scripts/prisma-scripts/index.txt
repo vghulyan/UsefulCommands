@@ -1,9 +1,15 @@
-cd /usr/local/share/ca-certificates
-
-# Loop over every .crt/.pem file and print its filename + Subject:
 for cert in *.crt *.pem; do
+  # skip non-files
   [ -f "$cert" ] || continue
-  echo "––– $cert —––"
-  openssl x509 -in "$cert" -noout -subject | sed 's/subject= //'
-  echo
+
+  # pull subject & issuer, trim the “subject=” / “issuer=” prefixes
+  subj=$(openssl x509 -in "$cert" -noout -subject | sed 's/^subject= //')
+  issu=$(openssl x509 -in "$cert" -noout -issuer  | sed 's/^issuer=  //')
+
+  # if they match, print it
+  if [ "$subj" = "$issu" ]; then
+    echo "Root CA found: $cert"
+    echo "  $subj"
+    echo
+  fi
 done
