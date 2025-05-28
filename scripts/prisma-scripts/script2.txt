@@ -1,12 +1,22 @@
 #!/bin/bash
 
-# Recursively scan for .crt or .pem files
-find . -type f \( -iname "*.crt" -o -iname "*.pem" \) | while read -r cert; do
-  # Extract subject and issuer, remove leading labels
+# Recursively scan .crt and .pem files, skipping inaccessible ones
+find . -type f \( -iname "*.crt" -o -iname "*.pem" \) 2>/dev/null | while read -r cert; do
+  # Check file readability
+  if [ ! -r "$cert" ]; then
+    continue
+  fi
+
+  # Extract subject and issuer, skip if openssl fails
   subj=$(openssl x509 -in "$cert" -noout -subject 2>/dev/null | sed 's/^subject= //')
   issu=$(openssl x509 -in "$cert" -noout -issuer 2>/dev/null | sed 's/^issuer= //')
 
-  # Check if cert is self-signed (issuer == subject)
+  # Skip if either value is empty
+  if [ -z "$subj" ] || [ -z "$issu" ]; then
+    continue
+  fi
+
+  # Check if self-signed
   if [ "$subj" = "$issu" ]; then
     echo "🔐 Root CA found: $cert"
     echo "  Subject: $subj"
