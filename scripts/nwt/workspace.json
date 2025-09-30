@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "projects": {
+    "siso-components": {
+      "root": "packages/siso-components",
+      "sourceRoot": "packages/siso-components/src",
+      "projectType": "library"
+    },
+    "siso-components-react": {
+      "root": "packages/siso-components-react",
+      "sourceRoot": "packages/siso-components-react/src",
+      "projectType": "library"
+    },
+    "siso-components-angular": {
+      "root": "packages/siso-components-angular",
+      "sourceRoot": "packages/siso-components-angular/src",
+      "projectType": "library"
+    },
+    "siso-components-e2e": {
+      "root": "packages/siso-components-e2e",
+      "sourceRoot": "packages/siso-components-e2e/src",
+      "projectType": "library"
+    },
+    "obds-icons": {
+      "root": "packages/obds-icons",
+      "sourceRoot": "packages/obds-icons/src",
+      "projectType": "library"
+    }
+  }
+}
